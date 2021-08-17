@@ -14,9 +14,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { useHistory } from 'react-router-dom';
 import '../scss/login.scss';
    
 const Login=()=>{ 
+    let history = useHistory();
     const [room, setRoom] = React.useState('');
     const initialValues ={  
         userName:'',
@@ -25,16 +27,16 @@ const Login=()=>{
    * @description schema validation for login page
    */
     const validationSchema=Yup.object().shape({
-        email:Yup.string().email('Enter valid mail address').required('Required'),
+        userName:Yup.string().min(3).required('Required'),
     });
     const handleChange = (event) => {
         setRoom(event.target.value); 
-        console.log(room)
       };
       const onSubmit=(values,props)=>{
             setTimeout(()=>{
+                history.push('/dashboard');
                 props.resetForm();
-            },1000); 
+            },100); 
     };
     /**
      * @description creating login page
@@ -50,7 +52,7 @@ const Login=()=>{
                 <h2 className="header" data-testid="login">Login</h2>
                 </Grid>
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-                {()=>(
+                {(props)=>(
                     <Form data-testid="form">
                         <Field as={TextField} fullWidth autoComplete="off" name='userName' label='User Name' placeholder= 'Enter your Name'  required  helperText={<ErrorMessage name="userName">{ msg => <div className="errorMessage">{msg}</div> }</ErrorMessage>}/>
                         <FormControl  fullWidth>
@@ -68,7 +70,7 @@ const Login=()=>{
                              <MenuItem value={"abc"}>XYZ</MenuItem>
                           </Select>
                         </FormControl>
-                        <Button type='submit' fullWidth className="buttonMargin"  data-testid="submit">Login</Button>
+                        <Button type='submit' fullWidth className="buttonMargin">Start Chat</Button>
                     </Form>
                 )}
                 </Formik>
